@@ -1,3 +1,4 @@
 {
-  "outputStyle": "human-communication"
+  "outputStyle": "human-communication",
+  "agent": "human-gate"
 }
