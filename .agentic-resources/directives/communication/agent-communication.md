@@ -1,49 +1,44 @@
-# Comunicacion entre agentes
+# Comunicación entre agentes
 
-Alcance: rige toda comunicacion agente-a-agente. No rige los mensajes del
-agente principal hacia el humano, que estan en human-communication.md.
+> Rige el intercambio dinámico entre agentes. No rige la comunicación del agente principal con el humano.
+>
+> Políticas estáticas, system prompts, herramientas y entorno no cuentan como mensajes entre agentes.
 
-## 1. Solo por contrato
+## Contrato único
 
-Un agente recibe una ruta a un contrato y devuelve un contrato de cierre.
-No hay otro canal. No se pasa contexto conversacional, ni historial, ni
-explicaciones fuera del contrato.
+El contrato es el único payload de trabajo entre agentes.
+Una delegación entrega solo el identificador o ruta del contrato. No añade contexto conversacional, historial humano, resúmenes ni instrucciones de tarea fuera de él.
+El contrato contiene o referencia todo input, alcance, criterio y evidencia necesarios.
+El agente puede descubrir detalles técnicos dentro del alcance autorizado. Si falta una decisión, autoridad, criterio o input necesario que no puede derivarse de la evidencia, cierra `blocked`.
 
-Si algo hace falta para trabajar y no esta en el contrato, el turno esta
-mal especificado: cierra bloqueada con el motivo.
+## Contrato inmutable
 
-## 2. Registro caveman
+El contrato de entrada no cambia durante el turno.
+Un cambio de alcance, input o criterio requiere nueva versión o nuevo contrato.
+No hay correcciones laterales, steering ni conversación libre entre agentes.
+Si un agente delega trabajo adicional, crea un contrato hijo y aplica este mismo protocolo.
 
-Todo texto que un agente emita para otro agente, o para el registro, va en
-registro comprimido: sin articulos innecesarios, sin cortesia, sin
-transiciones, sin anuncios de intencion.
+## Salida única
 
-Escribe hechos, no narracion.
+El único payload textual que sale de un worker es su contrato de cierre.
+Durante la ejecución usa herramientas directamente. No emite narración, progreso, intención ni explicaciones sueltas.
+`done`, `blocked`, `partial` y `failed` se expresan siempre mediante el contrato de cierre.
 
-Evita: "Voy a revisar el contrato para entender que archivos hay que
-tocar, y despues corro la verificacion."
-Prefiere: (ninguna emision; usa la herramienta)
+## Registro Caveman
 
-Evita: "El cambio quedo aplicado correctamente y la verificacion paso sin
-problemas."
-Prefiere: el JSON de cierre.
+Los campos de texto libre del contrato son factuales, breves y atómicos.
+Sin cortesía, transiciones, anuncios de intención, pedagogía, analogías ni repetición.
+Incluye causa o justificación solo cuando sea necesaria para comprender un resultado o decisión.
+Código, comandos, IDs, rutas, errores y literales conservan su forma exacta.
+Logs, artefactos y evidencia extensa se referencian por ruta, ID o hash cuando no sea necesario copiarlos.
+Un hecho se transmite una vez.
 
-## 3. Sin analogias ni pedagogia
+## Registro operacional
 
-Las metaforas, los ejemplos y las explicaciones de conceptos son para
-humanos. Entre agentes son ruido que se paga en contexto reenviado.
+El contrato comunica resultados. El registro operacional conserva evidencia.
+El agente no narra su actividad para producir logs; esa observabilidad corresponde al arnés.
 
-## 4. Un solo mensaje de texto
+## Invariante
 
-El unico texto que un subagente emite es su contrato de cierre. Todo lo
-demas son llamadas a herramientas.
-
-Si estas bloqueado, eso tambien va en el contrato de cierre, en el campo
-correspondiente, no como prosa suelta.
-
-## 5. El costo
-
-Cada mensaje de texto de un agente reenvia todo el contexto acumulado del
-turno. En T-22 el orquestador emitio 41 mensajes de solo texto sobre 89
-llamadas, cada uno arrastrando hasta 113k de contexto. La brevedad aqui no
-es estilo: es la mitad del gasto del turno.
+**No existe comunicación de trabajo fuera del contrato.**
+Si información necesaria no puede representarse o referenciarse mediante el contrato, el protocolo o su esquema están incompletos.
