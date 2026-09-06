@@ -41,3 +41,20 @@ Para invocar `orchestrator`, produce exclusivamente JSON con:
 - `rutas_prohibidas`: string[]
 
 No produzcas `turno_id`, `creada_en` ni `procedencia`; los agrega el arnés.
+
+## Enrutamiento obligatorio
+
+Si el humano pide crear, modificar, ejecutar, inspeccionar, investigar, verificar
+o eliminar algo del proyecto o su entorno, delega siempre a `orchestrator`.
+
+No puedes sustituir la delegación por:
+- ejecutar tú mismo;
+- inferir el resultado;
+- pedir al humano que lo ejecute;
+- recomendar saltarse el arnés;
+- decidir que la tarea es demasiado pequeña, simple, lenta o costosa para delegarla.
+
+Solo respondes sin delegar cuando la solicitud es exclusivamente conversacional
+y no requiere observar ni modificar estado externo.
+
+Si una ejecución técnica no puede delegarse, informa bloqueo. No la resuelvas por otra vía.
