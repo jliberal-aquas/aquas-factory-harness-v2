@@ -1,25 +1,14 @@
-import {
-  mkdir,
-  readFile,
-  writeFile,
-} from "node:fs/promises";
-
-import {
-  dirname,
-  resolve,
-} from "node:path";
-
-import {
-  CLAUDE_CODE_AGENTS,
-  type ClaudeAgentDefinition,
-} from "./agents.ts";
+import {mkdir, readFile, writeFile} from "node:fs/promises";
+import {dirname,resolve} from "node:path";
+import {  CLAUDE_CODE_AGENTS, type ClaudeAgentDefinition} from "./agents.ts";
 
 export type CompiledAgent = {
   name: string;
-  source: string;
+  sources: string[];
   target: string;
   changed: boolean;
 };
+
 
 function renderFrontmatter(
   definition: ClaudeAgentDefinition,
@@ -35,7 +24,9 @@ function renderFrontmatter(
   ];
 
   if (fm.maxTurns !== undefined) {
-    lines.push(`maxTurns: ${fm.maxTurns}`);
+    lines.push(
+      `maxTurns: ${fm.maxTurns}`,
+    );
   }
 
   lines.push("---");
@@ -43,11 +34,15 @@ function renderFrontmatter(
   return lines.join("\n");
 }
 
+
 async function readIfExists(
   path: string,
 ): Promise<string | null> {
   try {
-    return await readFile(path, "utf8");
+    return await readFile(
+      path,
+      "utf8",
+    );
   } catch (error) {
     if (
       error instanceof Error &&
@@ -61,50 +56,100 @@ async function readIfExists(
   }
 }
 
+
+async function readCanonicalSources(
+  projectRoot: string,
+  sources: string[],
+): Promise<string> {
+  const behaviors: string[] = [];
+
+  for (const source of sources) {
+    const sourcePath = resolve(
+      projectRoot,
+      source,
+    );
+
+    const behavior = (
+      await readFile(
+        sourcePath,
+        "utf8",
+      )
+    ).trim();
+
+    if (
+      behavior.startsWith("---")
+    ) {
+      throw new Error(
+        `${source}: behavior canónico no debe contener frontmatter`,
+      );
+    }
+
+    behaviors.push(
+      behavior,
+    );
+  }
+
+  return behaviors.join(
+    "\n\n",
+  );
+}
+
+
 async function compileAgent(
   projectRoot: string,
   definition: ClaudeAgentDefinition,
 ): Promise<CompiledAgent> {
-  const sourcePath = resolve(
-    projectRoot,
-    definition.source,
-  );
+  /*
+   * Un agente puede componerse desde varias fuentes
+   * canónicas, pero siempre genera un solo target.
+   */
+  const behavior =
+    await readCanonicalSources(
+      projectRoot,
+      definition.sources,
+    );
 
   const targetPath = resolve(
     projectRoot,
     definition.target,
   );
 
-  const behavior = (
-    await readFile(sourcePath, "utf8")
-  ).trim();
-
-  if (behavior.startsWith("---")) {
-    throw new Error(
-      `${definition.source}: behavior canónico no debe contener frontmatter`,
-    );
-  }
-
   const generated =
     `${renderFrontmatter(definition)}\n\n` +
     `${behavior}\n`;
 
-  const current = await readIfExists(
-    targetPath,
-  );
+  const current =
+    await readIfExists(
+      targetPath,
+    );
 
-  if (current === generated) {
+  /*
+   * Evita reescribir el adapter si no cambió.
+   */
+  if (
+    current === generated
+  ) {
     return {
-      name: definition.frontmatter.name,
-      source: definition.source,
-      target: definition.target,
-      changed: false,
+      name:
+        definition.frontmatter.name,
+
+      sources:
+        definition.sources,
+
+      target:
+        definition.target,
+
+      changed:
+        false,
     };
   }
 
-  await mkdir(dirname(targetPath), {
-    recursive: true,
-  });
+  await mkdir(
+    dirname(targetPath),
+    {
+      recursive: true,
+    },
+  );
 
   await writeFile(
     targetPath,
@@ -113,19 +158,31 @@ async function compileAgent(
   );
 
   return {
-    name: definition.frontmatter.name,
-    source: definition.source,
-    target: definition.target,
-    changed: true,
+    name:
+      definition.frontmatter.name,
+
+    sources:
+      definition.sources,
+
+    target:
+      definition.target,
+
+    changed:
+      true,
   };
 }
+
 
 export async function compileClaudeCodeAgents(
   projectRoot: string,
 ): Promise<CompiledAgent[]> {
-  const result: CompiledAgent[] = [];
+  const result: CompiledAgent[] =
+    [];
 
-  for (const definition of CLAUDE_CODE_AGENTS) {
+  for (
+    const definition
+    of CLAUDE_CODE_AGENTS
+  ) {
     result.push(
       await compileAgent(
         projectRoot,
