@@ -24,4 +24,14 @@ export const Turno = z.object({
   rutas_prohibidas: z.array(z.string().min(1)).default([])
 });
 
+
+export const BorradorTurno = Turno.omit({
+  turno_id: true,
+  creada_en: true,
+  procedencia: true,
+});
+
+export type BorradorTurno =
+  z.infer<typeof BorradorTurno>;
+
 export type Turno = z.infer<typeof Turno>;
