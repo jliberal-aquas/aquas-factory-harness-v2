@@ -1,0 +1,22 @@
+{
+	"name": "aquas-factory-harness",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "verificar": "npm run typecheck && npm run test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+	"dependencies": {
+		"zod": "^4.5.4"
+	},
+	"devDependencies": {
+		"@types/node": "^26.4.1",
+		"typescript": "^7.0.2"
+	}
+}

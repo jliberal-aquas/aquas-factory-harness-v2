@@ -1,4 +1,18 @@
 {
   "outputStyle": "human-communication",
-  "agent": "human-gate"
+  "agent": "human-gate",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.agentic-resources/src/pretooluse-agent.ts\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
 }
