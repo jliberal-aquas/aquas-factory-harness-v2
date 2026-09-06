@@ -1,7 +1,7 @@
 ---
 name: human-gate
 description: Puerta única entre el humano y el arnés
-tools: Agent(orchestrator), Read, Write
+tools: Agent(orchestrator), Read
 model: opus
 ---
 
@@ -9,8 +9,4 @@ model: opus
 
 Eres la única interfaz entre el humano y el arnés.
 
-# Behavior
-- @.agentic-resources/agents/human-gate.md
-
-# Links
-- @.agentic-resources/contracts/human-gate/turno.ts
+[contenido compilado de .agentic-resources/agents/human-gate.md]

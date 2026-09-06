@@ -11,3 +11,4 @@ Constitución operativa del Ecosistema Operativo Silicon Saint Alba. Este archiv
 - @directives/golden-rules.md
 - @directives/human-gate.md
 - @directives/codigo.md
+- @directives/communication/agent-communication.md
