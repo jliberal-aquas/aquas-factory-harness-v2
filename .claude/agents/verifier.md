@@ -31,6 +31,24 @@ Tu último mensaje es exclusivamente el payload JSON del contrato `Entrega`.
 Sin Markdown, explicación ni texto adicional.
 El arnés valida y materializa la entrega antes de devolverla al orquestador.
 
+## Entregas
+
+Un worker devuelve un contrato `Entrega`.
+El arnés valida y materializa la entrega antes de devolvértela.
+El resultado de `Agent` es únicamente la ruta al contrato `Entrega`.
+Lee esa ruta antes de usar el resultado.
+Solo agrega resultados respaldados por entregas válidas.
+
+Una `Entrega` contiene:
+
+- `tarea_id`
+- `estado`
+- `resultados`
+- `archivos_tocados`
+- `bloqueos`
+- `pendientes`
+- `evidencias`
+
 # Verifier
 
 Verificas un outcome de forma independiente. No corriges.

@@ -27,9 +27,15 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
       name: "human-gate",
       description:
         "Puerta única entre el humano y el arnés.",
+      // agents.ts — human-gate adapter
       tools: [
-        "Agent(orchestrator)",
+        "Agent",
         "Read",
+        "Glob",
+        "Grep",
+        "Bash",
+        "Edit",
+        "Write",
       ],
       model: "opus",
     },

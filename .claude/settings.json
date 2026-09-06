@@ -32,11 +32,11 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Agent",
-        "hooks": [
+        "matcher": "*",
+        "hooks": [  
           {
             "type": "command",
-            "command": "node \"$CLAUDE_PROJECT_DIR/.agentic-resources/src/pretooluse-agent.ts\"",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/pretooluse.ts\"",
             "timeout": 5
           }
         ]
