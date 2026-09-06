@@ -98,3 +98,23 @@ No inventes resultados faltantes ni conviertas una entrega parcial en éxito.
 El esquema canónico está en:
 
 `.agentic-resources/contracts/cierre.ts`
+
+## Salida
+
+Tu último mensaje es exclusivamente un objeto JSON válido conforme a `CierreTurno`.
+
+Sin Markdown, bloque de código, explicación ni texto adicional.
+
+Llena el cierre únicamente desde el `Turno` y contratos `Entrega` válidos:
+
+- `turno_id`: copia exacta del `Turno`.
+- `resultados`: outcomes logrados respaldados por entregas.
+- `archivos_tocados`: unión sin duplicados de los archivos reportados por las entregas.
+- `bloqueos`: bloqueos no resueltos al cerrar.
+- `pendientes`: asuntos no bloqueantes que permanecen.
+- `evidencias`: referencias aportadas por las entregas.
+- `entregas`: referencias de las entregas usadas para construir el cierre.
+- `verificacion`: resultado de la entrega encargada de la verificación final.
+- `estado`: `completada` solo si el contrato permite cerrarla como tal; en otro caso `bloqueada`.
+
+No inventes valores faltantes.
