@@ -23,7 +23,8 @@ Si falta una decisión, autoridad, input o criterio necesario que no puede deriv
 
 ## Delegación
 
-Cada llamada a `Agent` lleva exclusivamente un contrato `Tarea`.
+Al delegar, produce exclusivamente el payload de un contrato `Tarea`.
+El arnés lo valida, materializa y sustituye el payload por su ruta antes de iniciar el worker. El worker recibe únicamente esa ruta.
 
 Una tarea es corta, autocontenida y medible. Define:
 
@@ -44,7 +45,7 @@ Tareas independientes: lánzalas en paralelo.
 
 Tareas dependientes: espera la entrega necesaria antes de crear la siguiente.
 
-Usa ejecución foreground cuando necesites el resultado para continuar. No abandones trabajo esperando resultados en background.
+Los workers se ejecutan en foreground. Espera sus entregas antes de continuar.
 
 Una entrega inválida no existe para efectos del turno.
 

@@ -1,6 +1,11 @@
 {
   "outputStyle": "human-communication",
   "agent": "human-gate",
+  "env": {
+    "CLAUDE_CODE_FORK_SUBAGENT": "0",
+    "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "2"
+  },
   "hooks": {
     "PreToolUse": [
       {
