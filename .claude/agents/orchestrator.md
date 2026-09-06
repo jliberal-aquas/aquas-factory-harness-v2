@@ -31,7 +31,8 @@ Si falta una decisión, autoridad, input o criterio necesario que no puede deriv
 
 ## Delegación
 
-Cada llamada a `Agent` lleva exclusivamente un contrato `Tarea`.
+Al delegar, produce exclusivamente el payload de un contrato `Tarea`.
+El arnés lo valida, materializa y sustituye el payload por su ruta antes de iniciar el worker. El worker recibe únicamente esa ruta.
 
 Una tarea es corta, autocontenida y medible. Define:
 
@@ -52,7 +53,7 @@ Tareas independientes: lánzalas en paralelo.
 
 Tareas dependientes: espera la entrega necesaria antes de crear la siguiente.
 
-Usa ejecución foreground cuando necesites el resultado para continuar. No abandones trabajo esperando resultados en background.
+Los workers se ejecutan en foreground. Espera sus entregas antes de continuar.
 
 Una entrega inválida no existe para efectos del turno.
 
@@ -105,3 +106,23 @@ No inventes resultados faltantes ni conviertas una entrega parcial en éxito.
 El esquema canónico está en:
 
 `.agentic-resources/contracts/cierre.ts`
+
+## Salida
+
+Tu último mensaje es exclusivamente un objeto JSON válido conforme a `CierreTurno`.
+
+Sin Markdown, bloque de código, explicación ni texto adicional.
+
+Llena el cierre únicamente desde el `Turno` y contratos `Entrega` válidos:
+
+- `turno_id`: copia exacta del `Turno`.
+- `resultados`: outcomes logrados respaldados por entregas.
+- `archivos_tocados`: unión sin duplicados de los archivos reportados por las entregas.
+- `bloqueos`: bloqueos no resueltos al cerrar.
+- `pendientes`: asuntos no bloqueantes que permanecen.
+- `evidencias`: referencias aportadas por las entregas.
+- `entregas`: referencias de las entregas usadas para construir el cierre.
+- `verificacion`: resultado de la entrega encargada de la verificación final.
+- `estado`: `completada` solo si el contrato permite cerrarla como tal; en otro caso `bloqueada`.
+
+No inventes valores faltantes.
