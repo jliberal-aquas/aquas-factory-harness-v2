@@ -31,7 +31,7 @@ type ContractDelegationOptions<
   buildContract: (
     draft: TDraft,
     context: DelegationContext,
-  ) => TContract;
+  ) => TContract | Promise<TContract>;
 
   pathFor: (
     contract: TContract,
@@ -72,15 +72,20 @@ export async function manageContractDelegation<
         options.label,
       );
 
-    const projectRoot = resolveProjectRoot(options.input.cwd);
+    const projectRoot =
+      resolveProjectRoot(
+        options.input.cwd,
+      );
 
     const contract =
-      options.buildContract(
+      await options.buildContract(
         draft,
         {
           projectRoot,
+
           sessionId:
             options.input.session_id,
+
           promptId:
             options.input.prompt_id,
         },
@@ -95,9 +100,14 @@ export async function manageContractDelegation<
 
     const materialized =
       await materializeContract({
-        schema: options.contractSchema,
-        contract: validatedContract,
+        schema:
+          options.contractSchema,
+
+        contract:
+          validatedContract,
+
         projectRoot,
+
         relativePath:
           options.pathFor(
             validatedContract,
