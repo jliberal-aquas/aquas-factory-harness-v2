@@ -91,6 +91,8 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Read",
         "Glob",
         "Grep",
+        "WebFetch",
+        "WebSearch",
       ],
       model: "haiku",
       effort: "low",

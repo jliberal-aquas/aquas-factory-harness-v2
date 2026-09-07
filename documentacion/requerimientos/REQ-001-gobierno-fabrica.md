@@ -33,7 +33,7 @@ H1. .agentic-resources/tools/backlog-anotar.mjs no existe. Las skills to-spec y 
 H2. .agentic-resources/hooks/estilo.ts no existe. directives/codigo.md cita LIMITE_LINEAS y LIMITE_BLOQUE_COMENTARIO que no estan en ningun archivo.
 H3. Las Entregas y el CierreTurno no se persisten en .aquas. Contradice GR4.
 H4. verifier declara Bash en su frontmatter y ningun gate cruza ese permiso contra ejecucion.comandos de su Tarea.
-H5. Ningun worker tiene WebFetch ni WebSearch. GR3 es inaplicable por construccion.
+H5. researcher dispone de WebFetch y WebSearch. GR3 deja de ser inaplicable por construccion. Verificado en .agentic-resources/adapters/claude-code/agents.ts:94-95 y .claude/agents/researcher.md:4.
 H6. No existe gate que exija un effort minimo al agente que conduce analisis de requisitos. human-gate condujo las decisiones D1 a D22 con effort low. El humano corrigio manualmente a effort high el 2026-09-07. Estado actual verificado: effort high en .agentic-resources/adapters/claude-code/agents.ts:49 y .claude/agents/human-gate.md:6.
 H7. .agentic-resources/adapters/claude-code/compile-agents.ts tiene 201 lineas y supera el limite de 200 de codigo.md.
 H8. codigo.md regla 1 describe adaptadores .mjs que no existen. Los adaptadores reales son .ts.

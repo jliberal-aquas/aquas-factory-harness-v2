@@ -1,7 +1,7 @@
 ---
 name: researcher
 description: "Investiga una tarea y devuelve evidencia técnica sin modificar estado."
-tools: Read, Glob, Grep
+tools: Read, Glob, Grep, WebFetch, WebSearch
 model: haiku
 effort: low
 ---
