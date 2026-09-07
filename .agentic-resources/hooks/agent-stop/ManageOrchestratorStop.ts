@@ -1,5 +1,6 @@
 import type {SubagentStop} from "../../contracts/claude/AgentStop.ts";
 import {CierreTurno} from "../../contracts/orchestrator/feedback.ts";
+import {registerAgentStopRetryExhausted} from "../claude/responses.ts";
 
 function bloquear(
   reason: string
@@ -8,6 +9,18 @@ function bloquear(
     decision: "block",
     reason
   } as const;
+}
+
+function manejarCierreInvalido(
+  stopHookActive: boolean,
+  reason: string,
+): unknown {
+  // stopHookActive true = ya hubo reintento: no bloquear de nuevo.
+  if (stopHookActive) {
+    registerAgentStopRetryExhausted(reason);
+    return undefined;
+  }
+  return bloquear(reason);
 }
 
 export async function ManageOrchestratorStop(
@@ -20,7 +33,8 @@ export async function ManageOrchestratorStop(
       input.last_assistant_message
     );
   } catch {
-    return bloquear(
+    return manejarCierreInvalido(
+      input.stop_hook_active,
       "Salida inválida. Devuelve únicamente JSON válido conforme a CierreTurno."
     );
   }
@@ -38,7 +52,8 @@ export async function ManageOrchestratorStop(
       })
       .join("; ");
 
-    return bloquear(
+    return manejarCierreInvalido(
+      input.stop_hook_active,
       `CierreTurno inválido: ${errores}`
     );
   }

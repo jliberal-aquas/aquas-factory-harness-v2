@@ -1,13 +1,14 @@
 import type {ZodType} from "zod";
 import {InvalidPayloadError, parseJson} from "../common/json.ts";
 import {validatePayload} from "../common/zod.ts";
-import {blockAgentStop} from "./responses.ts";
+import {blockAgentStop, registerAgentStopRetryExhausted} from "./responses.ts";
 
 
 export function validateContractStop<T>(
   message: string,
   schema: ZodType<T>,
   label: string,
+  stopHookActive: boolean,
 ): unknown {
   try {
     const payload =
@@ -26,6 +27,13 @@ export function validateContractStop<T>(
     if (
       error instanceof InvalidPayloadError
     ) {
+      // stopHookActive true = ya hubo reintento: no bloquear de nuevo.
+      if (stopHookActive) {
+        registerAgentStopRetryExhausted(
+          error.message,
+        );
+        return undefined;
+      }
       return blockAgentStop(
         error.message,
       );

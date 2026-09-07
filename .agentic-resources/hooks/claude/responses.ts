@@ -52,3 +52,13 @@ export function blockAgentStop(
     reason,
   } as const;
 }
+
+export function registerAgentStopRetryExhausted(
+  reason: string,
+): void {
+  registrarDenegacion({
+    tipo: "agentstop",
+    motivo: reason,
+    agotado_reintento: true,
+  });
+}

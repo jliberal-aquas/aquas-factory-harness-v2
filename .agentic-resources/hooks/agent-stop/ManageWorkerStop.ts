@@ -11,5 +11,6 @@ export function ManageWorkerStop(
     input.last_assistant_message,
     Entrega,
     "Entrega",
+    input.stop_hook_active,
   );
 }

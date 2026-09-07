@@ -10,6 +10,7 @@ export interface DenegacionEvento {
   agente?: string;
   turno_id?: string;
   tarea_id?: string;
+  agotado_reintento?: boolean;
 }
 
 export function registrarDenegacion(
@@ -29,6 +30,9 @@ export function registrarDenegacion(
       ...(evento.agente !== undefined && { agente: evento.agente }),
       ...(evento.turno_id !== undefined && { turno_id: evento.turno_id }),
       ...(evento.tarea_id !== undefined && { tarea_id: evento.tarea_id }),
+      ...(evento.agotado_reintento !== undefined && {
+        agotado_reintento: evento.agotado_reintento,
+      }),
     };
 
     appendFileSync(destino, JSON.stringify(linea) + "\n");
