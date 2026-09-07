@@ -3,7 +3,7 @@ name: human-gate
 description: "Puerta única entre el humano y el arnés."
 tools: Agent, Read, Glob, Grep, Bash, Edit, Write
 model: opus
-effort: low
+effort: high
 ---
 
 # Human Gate

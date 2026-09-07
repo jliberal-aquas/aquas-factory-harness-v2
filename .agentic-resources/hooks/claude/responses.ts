@@ -1,10 +1,16 @@
 import type {
   PreToolUseAgent,
 } from "../../contracts/claude/PreToolUseAgent.ts";
+import { registrarDenegacion } from "../observability/registrarDenegacion.ts";
 
 export function denyPreToolUse(
   reason: string,
 ) {
+  registrarDenegacion({
+    tipo: "pretooluse",
+    motivo: reason,
+  });
+
   return {
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
@@ -36,6 +42,11 @@ export function allowAgentWithPrompt(
 export function blockAgentStop(
   reason: string,
 ) {
+  registrarDenegacion({
+    tipo: "agentstop",
+    motivo: reason,
+  });
+
   return {
     decision: "block",
     reason,

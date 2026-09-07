@@ -46,7 +46,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Write",
       ],
       model: "opus",
-      effort: "low",
+      effort: "high",
     },
   },
 
