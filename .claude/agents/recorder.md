@@ -3,6 +3,7 @@ name: recorder
 description: "Actualiza estado documental y operacional autorizado de la fábrica."
 tools: Read, Glob, Grep, Edit, Write
 model: haiku
+effort: low
 ---
 
 # Worker

@@ -3,6 +3,7 @@ name: verifier
 description: "Verifica independientemente un outcome sin modificarlo."
 tools: Read, Glob, Grep, Bash
 model: haiku
+effort: low
 ---
 
 # Worker

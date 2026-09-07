@@ -23,6 +23,12 @@ function renderFrontmatter(
     `model: ${fm.model}`,
   ];
 
+  if (fm.effort !== undefined) {
+    lines.push(
+      `effort: ${fm.effort}`,
+    );
+  }
+
   if (fm.maxTurns !== undefined) {
     lines.push(
       `maxTurns: ${fm.maxTurns}`,

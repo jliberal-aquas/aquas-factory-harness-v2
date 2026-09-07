@@ -3,6 +3,7 @@ name: builder
 description: "Implementa un outcome contractual dentro del alcance autorizado."
 tools: Read, Glob, Grep, Edit, Write, Bash
 model: sonnet
+effort: medium
 ---
 
 # Worker

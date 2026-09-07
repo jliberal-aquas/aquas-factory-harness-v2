@@ -7,6 +7,14 @@ export type ClaudeAgentDefinition = {
     description: string;
     tools: string[];
     model: "opus" | "sonnet" | "haiku";
+
+    effort?:
+      | "low"
+      | "medium"
+      | "high"
+      | "xhigh"
+      | "max";
+
     maxTurns?: number;
   };
 };
@@ -38,6 +46,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Write",
       ],
       model: "opus",
+      effort: "low",
     },
   },
 
@@ -59,7 +68,8 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Grep",
         "Agent",
       ],
-      model: "sonnet",
+      model: "opus",
+      effort: "high",
       maxTurns: 60,
     },
   },
@@ -83,6 +93,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Grep",
       ],
       model: "haiku",
+      effort: "low",
     },
   },
 
@@ -108,6 +119,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Bash",
       ],
       model: "sonnet",
+      effort: "medium",
     },
   },
 
@@ -131,6 +143,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Bash",
       ],
       model: "haiku",
+      effort: "low",
     },
   },
 
@@ -155,6 +168,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Write",
       ],
       model: "haiku",
+      effort: "low",
     },
   },
 
@@ -178,6 +192,7 @@ export const CLAUDE_CODE_AGENTS: ClaudeAgentDefinition[] = [
         "Bash",
       ],
       model: "haiku",
+      effort: "low",
     },
   },
 ];

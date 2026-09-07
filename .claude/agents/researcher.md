@@ -3,6 +3,7 @@ name: researcher
 description: "Investiga una tarea y devuelve evidencia técnica sin modificar estado."
 tools: Read, Glob, Grep
 model: haiku
+effort: low
 ---
 
 # Worker

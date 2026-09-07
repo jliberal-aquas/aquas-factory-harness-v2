@@ -32,7 +32,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "*",
+        "matcher": "Agent|Bash|PowerShell|Edit|Write|NotebookEdit|Glob|Grep",
         "hooks": [
           {
             "type": "command",

@@ -3,6 +3,7 @@ name: committer
 description: "Crea el commit autorizado de un turno ya verificado."
 tools: Read, Glob, Grep, Bash
 model: haiku
+effort: low
 ---
 
 # Worker
