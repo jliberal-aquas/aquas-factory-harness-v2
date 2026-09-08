@@ -31,11 +31,6 @@ export function ManageHumanGatePretoolUse(
       draft,
       context,
     ) {
-      if (!context.promptId) {
-        throw new InvalidPayloadError(
-          "Turno requiere prompt_id.",
-        );
-      }
       const turnoId =
         `T-${randomUUID()}`;
       return {
@@ -46,8 +41,9 @@ export function ManageHumanGatePretoolUse(
         procedencia: {
           session_id:
             context.sessionId,
-          prompt_id:
-            context.promptId,
+          ...(context.promptId
+            ? {prompt_id: context.promptId}
+            : {}),
           turno_id:
             turnoId,
         },
