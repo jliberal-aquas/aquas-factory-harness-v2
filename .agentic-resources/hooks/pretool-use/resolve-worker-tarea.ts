@@ -5,6 +5,10 @@ import {Tarea} from "../../contracts/worker/tarea.ts";
 import {InvalidPayloadError, parseJson} from "../common/json.ts";
 import {readContract} from "../../workers/contracts/read-contract.ts";
 import {resolveProjectRoot} from "../common/project-root.ts";
+import {
+  readTareaPathCache,
+  writeTareaPathCache,
+} from "./tarea-path-cache.ts";
 
 type SubagentTranscriptLine = {
   type?: string;
@@ -124,6 +128,24 @@ export async function resolveWorkerTarea(
     );
   }
 
+  const projectRoot =
+    resolveProjectRoot(input.cwd);
+
+  const cachedPath =
+    await readTareaPathCache(
+      projectRoot,
+      agentId,
+    );
+
+  if (cachedPath !== undefined) {
+    return readContract(
+      projectRoot,
+      cachedPath,
+      Tarea,
+      "Tarea",
+    );
+  }
+
   const candidatePath =
     resolveTranscriptPath(
       transcriptPath,
@@ -148,13 +170,19 @@ export async function resolveWorkerTarea(
     );
   }
 
-  const projectRoot =
-    resolveProjectRoot(input.cwd);
+  const tarea =
+    await readContract(
+      projectRoot,
+      contractPath,
+      Tarea,
+      "Tarea",
+    );
 
-  return readContract(
+  await writeTareaPathCache(
     projectRoot,
+    agentId,
     contractPath,
-    Tarea,
-    "Tarea",
   );
+
+  return tarea;
 }
