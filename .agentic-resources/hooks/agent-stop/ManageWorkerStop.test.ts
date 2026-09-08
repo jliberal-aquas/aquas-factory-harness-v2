@@ -4,16 +4,19 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import type { SubagentStop } from "../../contracts/claude/AgentStop.ts";
 import { ManageWorkerStop } from "./ManageWorkerStop.ts";
+import { writeTareaPathCache } from "../pretool-use/tarea-path-cache.ts";
 
 const scratchBase = join(process.cwd(), ".scratch", "test-tmp");
 
-function conProyectoTemporal<T>(fn: (raiz: string) => T): T {
+async function conProyectoTemporal(
+  fn: (raiz: string) => Promise<void>,
+): Promise<void> {
   mkdirSync(scratchBase, { recursive: true });
   const raiz = mkdtempSync(join(scratchBase, "worker-stop-"));
   const original = process.env.CLAUDE_PROJECT_DIR;
   process.env.CLAUDE_PROJECT_DIR = raiz;
   try {
-    return fn(raiz);
+    await fn(raiz);
   } finally {
     process.env.CLAUDE_PROJECT_DIR = original;
     rmSync(raiz, { recursive: true, force: true });
@@ -38,14 +41,14 @@ const entregaValida = JSON.stringify({
   estado: "completada",
 });
 
-test("rama A: stop_hook_active false y Entrega invalida bloquea", () => {
-  const resultado = ManageWorkerStop(input("{bad json", false));
+test("rama A: stop_hook_active false y Entrega invalida bloquea", async () => {
+  const resultado = await ManageWorkerStop(input("{bad json", false));
   assert.equal((resultado as { decision: string }).decision, "block");
 });
 
-test("rama B: stop_hook_active true y Entrega invalida registra agotamiento", () => {
-  conProyectoTemporal((raiz) => {
-    const resultado = ManageWorkerStop(input("{bad json", true));
+test("rama B: stop_hook_active true y Entrega invalida registra agotamiento", async () => {
+  await conProyectoTemporal(async (raiz) => {
+    const resultado = await ManageWorkerStop(input("{bad json", true));
     assert.equal(resultado, undefined);
 
     const jsonl = readFileSync(join(raiz, ".aquas", "denegaciones.jsonl"), "utf8");
@@ -54,10 +57,12 @@ test("rama B: stop_hook_active true y Entrega invalida registra agotamiento", ()
   });
 });
 
-test("rama C: Entrega valida no bloquea ni registra", () => {
-  conProyectoTemporal((raiz) => {
-    assert.equal(ManageWorkerStop(input(entregaValida, false)), undefined);
-    assert.equal(ManageWorkerStop(input(entregaValida, true)), undefined);
+test("rama C: Entrega valida no bloquea ni registra", async () => {
+  await conProyectoTemporal(async (raiz) => {
+    await writeTareaPathCache(raiz, "a1", ".aquas/tareas/T-1/TA-1.json");
+
+    assert.equal(await ManageWorkerStop(input(entregaValida, false)), undefined);
+    assert.equal(await ManageWorkerStop(input(entregaValida, true)), undefined);
 
     assert.throws(() => readFileSync(join(raiz, ".aquas", "denegaciones.jsonl")));
   });

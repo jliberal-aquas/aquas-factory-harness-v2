@@ -1,6 +1,7 @@
 import type {SubagentStop} from "../../contracts/claude/AgentStop.ts";
 import {CierreTurno} from "../../contracts/orchestrator/feedback.ts";
 import {registerAgentStopRetryExhausted} from "../claude/responses.ts";
+import {persistirCierreTurno} from "./persistirCierre.ts";
 
 function bloquear(
   reason: string
@@ -57,6 +58,8 @@ export async function ManageOrchestratorStop(
       `CierreTurno inválido: ${errores}`
     );
   }
+
+  persistirCierreTurno(input.cwd, result.data);
 
   // Sin output = puede terminar.
   return undefined;
