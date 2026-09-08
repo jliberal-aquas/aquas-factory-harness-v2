@@ -1,6 +1,6 @@
 import { appendFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { resolveProjectRoot } from "../common/project-root.ts";
+import { esRaizUtilizable } from "./esRaizUtilizable.ts";
 
 export type TipoDenegacion = "pretooluse" | "agentstop";
 
@@ -15,9 +15,13 @@ export interface DenegacionEvento {
 
 export function registrarDenegacion(
   evento: DenegacionEvento,
+  raiz: string | undefined,
 ): void {
+  if (!esRaizUtilizable(raiz)) {
+    return;
+  }
+
   try {
-    const raiz = resolveProjectRoot(process.cwd());
     const dirAquas = join(raiz, ".aquas");
     const destino = join(dirAquas, "denegaciones.jsonl");
 

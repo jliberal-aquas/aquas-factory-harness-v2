@@ -133,6 +133,7 @@ export async function manageContractDelegation<
     ) {
       return denyPreToolUse(
         error.message,
+        options.input.cwd,
       );
     }
 

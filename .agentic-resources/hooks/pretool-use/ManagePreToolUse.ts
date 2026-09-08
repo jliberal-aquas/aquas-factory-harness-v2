@@ -19,6 +19,7 @@ function parseAgentCall(
 
       output: denyPreToolUse(
         "Llamada Agent inválida.",
+        input.cwd,
       ),
     };
   }
@@ -48,6 +49,7 @@ export async function ManagePreToolUse(
     if (input.tool_name !== "Agent") {
       return denyPreToolUse(
         `Human Gate no puede usar ${input.tool_name}. Toda ejecución técnica se delega a orchestrator.`,
+        input.cwd,
       );
     }
 
@@ -91,6 +93,7 @@ export async function ManagePreToolUse(
   if (input.tool_name === "Agent") {
     return denyPreToolUse(
       "Un worker no puede delegar a otros agentes.",
+      input.cwd,
     );
   }
 

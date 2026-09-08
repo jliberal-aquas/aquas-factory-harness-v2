@@ -15,10 +15,11 @@ function bloquear(
 function manejarCierreInvalido(
   stopHookActive: boolean,
   reason: string,
+  cwd: string,
 ): unknown {
   // stopHookActive true = ya hubo reintento: no bloquear de nuevo.
   if (stopHookActive) {
-    registerAgentStopRetryExhausted(reason);
+    registerAgentStopRetryExhausted(reason, cwd);
     return undefined;
   }
   return bloquear(reason);
@@ -36,7 +37,8 @@ export async function ManageOrchestratorStop(
   } catch {
     return manejarCierreInvalido(
       input.stop_hook_active,
-      "Salida inválida. Devuelve únicamente JSON válido conforme a CierreTurno."
+      "Salida inválida. Devuelve únicamente JSON válido conforme a CierreTurno.",
+      input.cwd,
     );
   }
 
@@ -55,7 +57,8 @@ export async function ManageOrchestratorStop(
 
     return manejarCierreInvalido(
       input.stop_hook_active,
-      `CierreTurno inválido: ${errores}`
+      `CierreTurno inválido: ${errores}`,
+      input.cwd,
     );
   }
 

@@ -8,6 +8,7 @@ export function validateContractStop<T>(
   message: string,
   schema: ZodType<T>,
   label: string,
+  cwd: string,
   stopHookActive: boolean,
 ): unknown {
   try {
@@ -31,11 +32,13 @@ export function validateContractStop<T>(
       if (stopHookActive) {
         registerAgentStopRetryExhausted(
           error.message,
+          cwd,
         );
         return undefined;
       }
       return blockAgentStop(
         error.message,
+        cwd,
       );
     }
     throw error;

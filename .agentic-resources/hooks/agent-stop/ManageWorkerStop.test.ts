@@ -23,10 +23,14 @@ async function conProyectoTemporal(
   }
 }
 
-function input(mensaje: string, stopHookActive: boolean): SubagentStop {
+function input(
+  mensaje: string,
+  stopHookActive: boolean,
+  cwd: string = process.cwd(),
+): SubagentStop {
   return {
     session_id: "s1",
-    cwd: process.cwd(),
+    cwd,
     stop_hook_active: stopHookActive,
     last_assistant_message: mensaje,
     hook_event_name: "SubagentStop",
@@ -48,7 +52,7 @@ test("rama A: stop_hook_active false y Entrega invalida bloquea", async () => {
 
 test("rama B: stop_hook_active true y Entrega invalida registra agotamiento", async () => {
   await conProyectoTemporal(async (raiz) => {
-    const resultado = await ManageWorkerStop(input("{bad json", true));
+    const resultado = await ManageWorkerStop(input("{bad json", true, raiz));
     assert.equal(resultado, undefined);
 
     const jsonl = readFileSync(join(raiz, ".aquas", "denegaciones.jsonl"), "utf8");
@@ -61,8 +65,8 @@ test("rama C: Entrega valida no bloquea ni registra", async () => {
   await conProyectoTemporal(async (raiz) => {
     await writeTareaPathCache(raiz, "a1", ".aquas/tareas/T-1/TA-1.json");
 
-    assert.equal(await ManageWorkerStop(input(entregaValida, false)), undefined);
-    assert.equal(await ManageWorkerStop(input(entregaValida, true)), undefined);
+    assert.equal(await ManageWorkerStop(input(entregaValida, false, raiz)), undefined);
+    assert.equal(await ManageWorkerStop(input(entregaValida, true, raiz)), undefined);
 
     assert.throws(() => readFileSync(join(raiz, ".aquas", "denegaciones.jsonl")));
   });

@@ -5,11 +5,12 @@ import { registrarDenegacion } from "../observability/registrarDenegacion.ts";
 
 export function denyPreToolUse(
   reason: string,
+  raiz: string | undefined,
 ) {
   registrarDenegacion({
     tipo: "pretooluse",
     motivo: reason,
-  });
+  }, raiz);
 
   return {
     hookSpecificOutput: {
@@ -41,11 +42,12 @@ export function allowAgentWithPrompt(
 
 export function blockAgentStop(
   reason: string,
+  raiz: string | undefined,
 ) {
   registrarDenegacion({
     tipo: "agentstop",
     motivo: reason,
-  });
+  }, raiz);
 
   return {
     decision: "block",
@@ -55,10 +57,11 @@ export function blockAgentStop(
 
 export function registerAgentStopRetryExhausted(
   reason: string,
+  raiz: string | undefined,
 ): void {
   registrarDenegacion({
     tipo: "agentstop",
     motivo: reason,
     agotado_reintento: true,
-  });
+  }, raiz);
 }

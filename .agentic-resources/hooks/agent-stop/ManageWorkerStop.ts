@@ -52,6 +52,7 @@ export async function ManageWorkerStop(
     input.last_assistant_message,
     Entrega,
     "Entrega",
+    input.cwd,
     input.stop_hook_active,
   );
 

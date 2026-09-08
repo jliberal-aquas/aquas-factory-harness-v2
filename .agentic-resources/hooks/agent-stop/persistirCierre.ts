@@ -36,7 +36,7 @@ function escribirSinTurno(
     [".aquas", "cierres", "sin-turno", nombre],
     contenido,
   );
-  registrarDenegacion({tipo: "agentstop", motivo});
+  registrarDenegacion({tipo: "agentstop", motivo}, raiz);
 }
 
 export function persistirEntrega(

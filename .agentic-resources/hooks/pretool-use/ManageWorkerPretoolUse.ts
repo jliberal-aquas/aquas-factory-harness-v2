@@ -37,7 +37,7 @@ export async function ManageWorkerPretoolUse(
         error.message :
         "Tarea del worker no resoluble.";
 
-    return denyPreToolUse(motivo);
+    return denyPreToolUse(motivo, input.cwd);
   }
 
   if (input.tool_name === "Bash") {
@@ -54,6 +54,7 @@ export async function ManageWorkerPretoolUse(
     ) {
       return denyPreToolUse(
         `Comando no autorizado por Tarea.ejecucion.comandos: ${command}`,
+        input.cwd,
       );
     }
 
@@ -67,6 +68,7 @@ export async function ManageWorkerPretoolUse(
     if (targetPath === undefined) {
       return denyPreToolUse(
         `${input.tool_name} sin ruta destino identificable.`,
+        input.cwd,
       );
     }
 
@@ -82,6 +84,7 @@ export async function ManageWorkerPretoolUse(
     ) {
       return denyPreToolUse(
         `Ruta prohibida por Tarea.rutas_prohibidas: ${targetPath}`,
+        input.cwd,
       );
     }
 

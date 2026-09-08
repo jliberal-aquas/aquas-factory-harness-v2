@@ -22,10 +22,14 @@ async function conProyectoTemporal(
   }
 }
 
-function input(mensaje: string, stopHookActive: boolean): SubagentStop {
+function input(
+  mensaje: string,
+  stopHookActive: boolean,
+  cwd: string = process.cwd(),
+): SubagentStop {
   return {
     session_id: "s1",
-    cwd: process.cwd(),
+    cwd,
     stop_hook_active: stopHookActive,
     last_assistant_message: mensaje,
     hook_event_name: "SubagentStop",
@@ -48,7 +52,7 @@ test("rama A: stop_hook_active false y CierreTurno invalido bloquea", async () =
 
 test("rama B: stop_hook_active true y CierreTurno invalido registra agotamiento", async () => {
   await conProyectoTemporal(async (raiz) => {
-    const resultado = await ManageOrchestratorStop(input("{bad json", true));
+    const resultado = await ManageOrchestratorStop(input("{bad json", true, raiz));
     assert.equal(resultado, undefined);
 
     const jsonl = readFileSync(join(raiz, ".aquas", "denegaciones.jsonl"), "utf8");
@@ -59,8 +63,8 @@ test("rama B: stop_hook_active true y CierreTurno invalido registra agotamiento"
 
 test("rama C: CierreTurno valido no bloquea ni registra", async () => {
   await conProyectoTemporal(async (raiz) => {
-    assert.equal(await ManageOrchestratorStop(input(cierreValido, false)), undefined);
-    assert.equal(await ManageOrchestratorStop(input(cierreValido, true)), undefined);
+    assert.equal(await ManageOrchestratorStop(input(cierreValido, false, raiz)), undefined);
+    assert.equal(await ManageOrchestratorStop(input(cierreValido, true, raiz)), undefined);
 
     assert.throws(() => readFileSync(join(raiz, ".aquas", "denegaciones.jsonl")));
   });

@@ -1,12 +1,17 @@
 import { appendFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { resolveProjectRoot } from "../common/project-root.ts";
+import { esRaizUtilizable } from "./esRaizUtilizable.ts";
 
 export function registrarPayloadPreToolUse(
   payload: Record<string, unknown>,
 ): void {
+  const raiz = payload.cwd;
+
+  if (!esRaizUtilizable(raiz)) {
+    return;
+  }
+
   try {
-    const raiz = resolveProjectRoot(process.cwd());
     const dirAquas = join(raiz, ".aquas");
     const destino = join(dirAquas, "payloads.jsonl");
 
