@@ -1,6 +1,7 @@
 import type {PreToolUse} from "../../contracts/claude/PreToolUse.ts";
 import {PreToolUseAgent} from "../../contracts/claude/PreToolUseAgent.ts";
 import {denyPreToolUse} from "../claude/responses.ts";
+import {registrarPayloadPreToolUse} from "../observability/registrarPayloadPreToolUse.ts";
 import {ManageHumanGatePretoolUse} from "./ManageHumanGatePretoolUse.ts";
 import {ManageOrchestratorPretoolUse} from "./ManageOrchestratorPretoolUse.ts";
 
@@ -30,6 +31,7 @@ function parseAgentCall(
 export async function ManagePreToolUse(
   input: PreToolUse,
 ): Promise<unknown> {
+  registrarPayloadPreToolUse(input);
 
   /*
    * MAIN.
