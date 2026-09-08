@@ -1,9 +1,11 @@
 import type {PreToolUse} from "../../contracts/claude/PreToolUse.ts";
 import {PreToolUseAgent} from "../../contracts/claude/PreToolUseAgent.ts";
+import {WorkerId} from "../../contracts/worker/worker-id.ts";
 import {denyPreToolUse} from "../claude/responses.ts";
 import {registrarPayloadPreToolUse} from "../observability/registrarPayloadPreToolUse.ts";
 import {ManageHumanGatePretoolUse} from "./ManageHumanGatePretoolUse.ts";
 import {ManageOrchestratorPretoolUse} from "./ManageOrchestratorPretoolUse.ts";
+import {ManageWorkerPretoolUse} from "./ManageWorkerPretoolUse.ts";
 
 function parseAgentCall(
   input: PreToolUse,
@@ -33,20 +35,12 @@ export async function ManagePreToolUse(
 ): Promise<unknown> {
   registrarPayloadPreToolUse(input);
 
-  /*
-   * MAIN.
-   *
-   * agent_id solo existe dentro de un
-   * subagente. En AQUAS el main es
-   * Human Gate.
-   */
+  // MAIN. agent_id solo existe en subagente.
+  // En AQUAS, el main es Human Gate.
   if (input.agent_id === undefined) {
 
-    /*
-     * Human Gate necesita Agent para
-     * delegar y Read para consumir
-     * referencias contractuales.
-     */
+    // Human Gate necesita Agent para delegar
+    // y Read para consumir referencias contractuales.
     if (input.tool_name === "Read") {
       return undefined;
     }
@@ -70,13 +64,8 @@ export async function ManagePreToolUse(
   }
 
 
-  /*
-   * ORCHESTRATOR.
-   *
-   * Su frontmatter restringe sus demás
-   * herramientas. Aquí interceptamos
-   * únicamente su delegación contractual.
-   */
+  // ORCHESTRATOR. Su frontmatter restringe sus demás herramientas.
+  // Aquí interceptamos únicamente su delegación contractual.
   if (
     input.agent_type === "orchestrator"
   ) {
@@ -97,17 +86,19 @@ export async function ManagePreToolUse(
   }
 
 
-  /*
-   * WORKERS.
-   *
-   * Los workers ejecutan; no orquestan.
-   * Sus otras capacidades quedan
-   * restringidas por su frontmatter.
-   */
+  // WORKERS. Ejecutan; no orquestan.
+  // Sus otras capacidades quedan restringidas por su frontmatter.
   if (input.tool_name === "Agent") {
     return denyPreToolUse(
       "Un worker no puede delegar a otros agentes.",
     );
+  }
+
+  const worker =
+    WorkerId.safeParse(input.agent_type);
+
+  if (worker.success) {
+    return ManageWorkerPretoolUse(input);
   }
 
   return undefined;
