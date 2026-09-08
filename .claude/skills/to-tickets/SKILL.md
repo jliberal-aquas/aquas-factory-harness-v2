@@ -59,16 +59,9 @@ Iterate until the user approves the breakdown.
 
 Write one file per ticket under `documentacion/tickets/<feature-slug>/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file.
 
-Then run the harness's backlog tool ONCE PER TICKET written, with its blocking edges:
+Then run the harness's backlog tool ONCE PER TICKET written:
 
-`node .agentic-resources/tools/backlog-anotar.mjs ticket --id <NN> --feature <feature-id> --titulo <title> --bloqueado-por <NN,NN> --session <session_id> --prompt <prompt_id> --turno skill:to-tickets`
-
-After all tickets are annotated, run it again to move the feature's stage to `tickets`:
-
-`node .agentic-resources/tools/backlog-anotar.mjs feature --id <feature-id> --titulo <title> --etapa tickets --session <session_id> --prompt <prompt_id> --turno skill:to-tickets`
-
-`--session` and `--prompt` come from the procedencia block the harness injects into every prompt. `--turno` always carries the literal `skill:to-tickets`, because this skill does not run inside a turno, and procedencia is never invented.
-
+`node .agentic-resources/tools/backlog-anotar.ts --tipo feature --titulo "<NN>: <ticket title>" --prioridad <alta|media|baja> --origen humano --req <REQ-NNN> --spec <ESP-NNN>`
 
 Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
 

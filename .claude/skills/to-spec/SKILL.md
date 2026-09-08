@@ -16,11 +16,9 @@ Specs live in this repository, not in an issue tracker. Write them to `documenta
 
 Check with the user that these seams match their expectations.
 
-3. Write the spec using the template below to `documentacion/especificaciones/ESP-NNN-<slug>.md`, where NNN is the next free number. Then run the harness's backlog tool to add or update the feature's entry and mark the `spec` stage done:
+3. Write the spec using the template below to `documentacion/especificaciones/ESP-NNN-<slug>.md`, where NNN is the next free number. Then run the harness's backlog tool to add an entry for the feature:
 
-   `node .agentic-resources/tools/backlog-anotar.mjs feature --id <feature-id> --titulo <title> --etapa spec --session <session_id> --prompt <prompt_id> --turno skill:to-spec`
-
-   `--session` and `--prompt` come from the procedencia block the harness injects into every prompt. `--turno` always carries the literal `skill:to-spec`, because this skill does not run inside a turno, and procedencia is never invented.
+   `node .agentic-resources/tools/backlog-anotar.ts --tipo feature --titulo "<title>" --prioridad <alta|media|baja> --origen humano --req <REQ-NNN> --spec <ESP-NNN>`
 
 <spec-template>
 
