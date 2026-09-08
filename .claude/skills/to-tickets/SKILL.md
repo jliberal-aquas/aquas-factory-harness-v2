@@ -63,7 +63,9 @@ Then run the harness's backlog tool ONCE PER TICKET written:
 
 `node .agentic-resources/tools/backlog-anotar.ts --tipo feature --titulo "<NN>: <ticket title>" --prioridad <alta|media|baja> --origen humano --req <REQ-NNN> --spec <ESP-NNN>`
 
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
+Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom. When starting work on a ticket, move its backlog item's state:
+
+`node .agentic-resources/tools/backlog-mover.ts --id <BKL-NNN> --estado <abiertos|en-curso|cerrados>`
 
 Do NOT close or modify any parent issue.
 

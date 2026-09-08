@@ -1,3 +1,5 @@
 node_modules/
-.aquas/
+.aquas/*
+!.aquas/backlog/
+!.aquas/hot/
 .scratch/ 
