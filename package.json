@@ -6,7 +6,8 @@
   "scripts": {
     "test": "node --test \".agentic-resources/**/*.test.ts\"",
     "typecheck": "tsc --noEmit",
-    "verificar": "npm run typecheck && npm run test"
+    "verificar": "npm run typecheck && npm run test",
+    "reload-agents": "node .agentic-resources/cli/cli.ts reload-agents --claude-code"
   },
   "keywords": [],
   "author": "",

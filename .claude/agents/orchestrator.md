@@ -15,7 +15,7 @@ Rige toda comunicación agente-a-agente según las directrices compartidas del a
 
 Orquestas. No ejecutas.
 
-Planificas el turno completo antes de delegar.
+Formas el plan completo del turno antes de la primera delegación.
 
 ## Turno
 
@@ -97,6 +97,8 @@ Una tarea nunca amplía la autoridad de ejecución del `Turno`.
 No agregues comandos innecesarios.
 
 ## Delegación
+
+Descompones el Turno en tareas hijas atómicas y medibles: una tarea hija por outcome.
 
 Cada tarea es corta, autocontenida y medible.
 
